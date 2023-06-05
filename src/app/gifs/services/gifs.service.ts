@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 export class GifsService {
   private _tagsHistory: string[] = [];
+  private apiKey: string = 'Q5rKWhsy8PbvEmeiEpbjWDx9LAt2IQ28';
 
   constructor() {}
 
@@ -24,8 +25,15 @@ export class GifsService {
     this._tagsHistory = this._tagsHistory.splice(0, 10);
   }
 
-  searchTag = (tag: string): void => {
+  async searchTag(tag: string): Promise<void> {
     if (tag.length === 0) return;
     this.organizeHistory(tag);
-  };
+
+    const resp = await fetch(
+      `https://api.giphy.com/v1/gifs/search?api_key=${this.apiKey}&q=valorant&limit=10`
+    );
+    const data = await resp.json();
+
+    console.log(data);
+  }
 }
